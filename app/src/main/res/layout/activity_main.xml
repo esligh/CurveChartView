@@ -12,10 +12,11 @@
     tools:context="com.widget.fr.curvechartview.MainActivity">
 
     <com.widget.fr.curvechartview.CurveChartView
-        android:id="@+id/high_bp_chart"
-        android:layout_width="1376dp"
+        android:id="@+id/chart_view"
+        android:layout_width="800dp"
         android:layout_height="370dp"
-        chart:max_y_value="180"
+        android:layout_centerInParent="true"
+        chart:max_y_value="100"
         chart:max_x_value="30"
         chart:coordinate_horizontal_line_number="6"
         chart:show_coordinate="true"

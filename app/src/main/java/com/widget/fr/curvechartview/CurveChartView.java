@@ -16,22 +16,27 @@ import java.util.List;
 
 public class CurveChartView extends View {
 
+    protected final float DENSITY = getResources().getDisplayMetrics().density;
+
     private static final int DEFAULT_CHART_COLOR = Color.parseColor("#6050E3C2");
     private static final int DEFAULT_COORDINATE_LINE_COLOR = Color.parseColor("#003737");
+    private static final int DEFAULT_POINT_COLOR = Color.parseColor("#009688");
+    private static final int DEFAULT_POINTER_RADIUS = 8;
+    private static final int DEFAULT_STROKE_WIDTH = 2;
+
     private static final float DEFAULT_MAX_VALUE_X = 100.0f;
     private static final float DEFAULT_MAX_VALUE_Y = 100.0f;
 
-    private static final int CIRCLE_SIZE = 8;
-    private static final int STROKE_SIZE = 2;
     private static final float SMOOTHNESS = 0.3f;
 
-    private final Paint mPaint;
-    private final Path mPath;
-    private final float mCircleSize;
-    private final float mStrokeSize;
-    private final float mBorder;
+    private  Paint mPaint;
+    private  Path mPath;
+    private  float mCircleSize;
+    private  float mStrokeSize;
+    private  float mBorder;
     private int mChartColor ;
     private PointF[] mValues;
+
     private float mMaxY;
     private float mMaxX;
     private boolean hasCoordinate ;
@@ -39,30 +44,39 @@ public class CurveChartView extends View {
     private int mCoordHLineNumber ;
     private int mCoordLineColor ;
 
+    private int mPointColor;
+
     public CurveChartView(Context context) {
         this(context, null, 0);
+        init(null,0);
     }
 
     public CurveChartView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
+        init(attrs,0);
     }
 
     public CurveChartView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CurveChartView, defStyle, 0);
+        init(attrs,defStyle);
+    }
+
+
+    private void init(AttributeSet attrs,int defStyle)
+    {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CurveChartView, defStyle, 0);
         hasCoordinate = a.getBoolean(R.styleable.CurveChartView_show_coordinate, false);
         mChartColor = a.getColor(R.styleable.CurveChartView_chart_area_color, DEFAULT_CHART_COLOR);
         mCoordLineColor =a.getColor(R.styleable.CurveChartView_coordinate_color, DEFAULT_COORDINATE_LINE_COLOR);
         mMaxY = a.getFloat(R.styleable.CurveChartView_max_y_value, DEFAULT_MAX_VALUE_X);
         mMaxX = a.getFloat(R.styleable.CurveChartView_max_x_value, DEFAULT_MAX_VALUE_Y);
         mCoordHLineNumber = a.getInteger(R.styleable.CurveChartView_coordinate_horizontal_line_number,10);
+        mPointColor = a.getColor(R.styleable.CurveChartView_point_color,DEFAULT_POINT_COLOR);
+        mCircleSize = a.getDimension(R.styleable.CurveChartView_point_radius,DEFAULT_POINTER_RADIUS*DENSITY);
+        mStrokeSize = a.getDimension(R.styleable.CurveChartView_curve_stroke_width,DEFAULT_STROKE_WIDTH*DENSITY);
         a.recycle();
-        float scale = context.getResources().getDisplayMetrics().density;
 
-        mCircleSize = scale * CIRCLE_SIZE;
-        mStrokeSize = scale * STROKE_SIZE;
         mBorder = mCircleSize;
-
         mPaint = new Paint();
         mPaint.setAntiAlias(true);
         mPaint.setStrokeWidth(mStrokeSize);
@@ -73,6 +87,7 @@ public class CurveChartView extends View {
         mCoordinatePaint.setColor(mCoordLineColor);
         mPath = new Path();
     }
+
 
     public void setData(PointF[] values) {
         mValues = values;
@@ -92,12 +107,10 @@ public class CurveChartView extends View {
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-
         final float height = getMeasuredHeight() - 2*mBorder;
         final float width = getMeasuredWidth() - 2*mBorder;
-        final float left = 0;
 
-        //draw the horizontal coordinate
+        //draw the horizontal coordinate system
 
         if(hasCoordinate){
             float startX = mBorder;
@@ -110,6 +123,10 @@ public class CurveChartView extends View {
             canvas.drawLine(startX, startY, startX+width, startY, mCoordinatePaint);
         }
 
+        if(mValues == null || mValues.length ==0){
+            return;
+        }
+
         int size = mValues.length;
 
         mPath.reset();
@@ -117,7 +134,7 @@ public class CurveChartView extends View {
         // calculate point coordinates
         List<PointF> points = new ArrayList<PointF>(size);
         for (PointF point : mValues) {
-            float x = mBorder + (point.x-left)*width/mMaxX;
+            float x = mBorder + point.x*width/mMaxX;
             float y = mBorder + height - (point.y)*height/mMaxY;
             points.add(new PointF(x,y));
         }
@@ -162,17 +179,16 @@ public class CurveChartView extends View {
         }
 
         // draw circles
-        mPaint.setColor(mChartColor);
+        mPaint.setColor(mPointColor);
         mPaint.setStyle(Paint.Style.FILL_AND_STROKE);
         for (PointF point : points) {
             canvas.drawCircle(point.x, point.y, mCircleSize/2, mPaint);
         }
 
-        mPaint.setStyle(Paint.Style.FILL);
-        mPaint.setColor(Color.WHITE);
-        for (PointF point : points) {
-            canvas.drawCircle(point.x, point.y, (mCircleSize-mStrokeSize)/2, mPaint);
-        }
-
+//        mPaint.setStyle(Paint.Style.FILL);
+//        mPaint.setColor(Color.WHITE);
+//        for (PointF point : points) {
+//            canvas.drawCircle(point.x, point.y, (mCircleSize-mStrokeSize)/2, mPaint);
+//        }
     }
 }

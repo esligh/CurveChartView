@@ -8,7 +8,9 @@
         <attr name="coordinate_color" format="color"/>
         <attr name="show_coordinate" format="boolean"/>    
         <attr name="coordinate_horizontal_line_number" format="integer" />
-
+        <attr name="point_color" format="color"/>
+        <attr name="point_radius" format="dimension"/>
+        <attr name="curve_stroke_width" format="dimension"/>
     </declare-styleable>
 
     
