@@ -4,7 +4,7 @@
     <declare-styleable name="CurveChartView">
         <attr name="max_y_value" format="float" />
         <attr name="max_x_value" format="float" />   
-        <attr name="chart_area_color" format="color"/>
+        <attr name="chart_primary_color" format="color"/>
         <attr name="coordinate_color" format="color"/>
         <attr name="show_coordinate" format="boolean"/>    
         <attr name="coordinate_horizontal_line_number" format="integer" />
