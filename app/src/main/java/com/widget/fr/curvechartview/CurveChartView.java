@@ -128,9 +128,10 @@ public class CurveChartView extends View {
             mPaint.setColor(mCoordLineColor);
 
             float startX = mBorder;
-            float startY = mBorder ;
-            float h = height/mCoordHLineNumber;
-            for(int i=0;i<mCoordHLineNumber;i++){
+            float h = height/mCoordHLineNumber-1;
+            float startY = mBorder+h ;
+
+            for(int i=0;i<mCoordHLineNumber-1;i++){
                 canvas.drawLine(startX, startY, startX+width, startY, mPaint);
                 startY+=h;
             }
@@ -201,5 +202,6 @@ public class CurveChartView extends View {
         for (PointF point : points) {
             canvas.drawCircle(point.x, point.y, (mCircleSize-mStrokeSize)/2, mPaint);
         }
+
     }
 }
