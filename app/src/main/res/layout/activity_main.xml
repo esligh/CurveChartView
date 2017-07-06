@@ -8,18 +8,24 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="com.widget.fr.curvechartview.MainActivity">
+    android:paddingTop="@dimen/activity_vertical_margin">
 
-    <com.widget.fr.curvechartview.CurveChartView
+    <com.widget.fr.curvechartview.WaveLineView
         android:id="@+id/chart_view"
         android:layout_width="800dp"
         android:layout_height="370dp"
+        android:layout_centerInParent="true"/>
+
+    <!--<com.widget.fr.curvechartview.CurveChartView
+        android:id="@+id/chart_view"
+        android:layout_width="800dp"
+        android:layout_height="370dp"
+        android:background="#ffcdd2"
         android:layout_centerInParent="true"
         chart:max_y_value="100"
         chart:max_x_value="30"
-        chart:coordinate_horizontal_line_number="6"
+        chart:coordinate_horizontal_line_number="11"
         chart:show_coordinate="true"
-        chart:chart_area_color="#604990E2"/>
+        chart:chart_primary_color="#604990E2"/>-->
 
 </RelativeLayout>
